@@ -21,7 +21,7 @@ initializeApp("Manage Hives").then(async () => {
             hivesTable.classList.add('table-clickable');
             const rows = hivesTable.querySelectorAll('tr');
             rows.forEach(row => {
-                row.addEventListener('click', () => navigateTo("/hives/", { params: {hiveId: row.id}}));
+                row.addEventListener('click', () => navigateTo("/hives/manage", { params: {hiveId: row.id}}));
             });
             mainElement.appendChild(hivesTable);
         } else {
