@@ -67,8 +67,7 @@ async function addHive(formData: FormData) {
             const tbody = hivesTable.querySelector('tbody') as HTMLElement;
             tbody.appendChild(newHiveRow);
             createMessage(response['message'], "main-message", "check_circle");
-            newHiveRow.addEventListener('click', () => navigateTo("/hives/", { params: {hiveId: newHiveRow.id}}));
-            // newHiveRow.addEventListener('click', () => window.location.href = `buzz-note-v3/hives/manage?hiveId=${newHiveRow.id}`);
+            newHiveRow.addEventListener('click', () => navigateTo("/hives/manage", { params: {hiveId: newHiveRow.id}}));
         } else {
             window.location.reload();
         }
