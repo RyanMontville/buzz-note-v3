@@ -1,5 +1,6 @@
 import { initializeApp } from "./main";
 import { Inspection, type Average, type Frame, type RadioGroupConfig, type TempAndCondition } from "./models";
+import { navigateTo } from "./modules/navigate";
 import { clearMessages, createButton, createCheckbox, createItemTable, createListTable, createMessage, createRadioGroup, makeElement, storeMessage } from "./modules/utils";
 import { addAverage } from "./services/averageService";
 import { addNewFrame } from "./services/frameService";
@@ -7,9 +8,11 @@ import { createInspection } from "./services/inspectionService";
 
 const loading = document.getElementById('loading') as HTMLElement;
 const mainElement = document.querySelector('main') as HTMLElement;
+const backButton = document.getElementById("back-button") as HTMLElement;
 
 initializeApp("End of Inspection").then(() => {
     try {
+        backButton.addEventListener('click', () => navigateTo('/'));
         const date = sessionStorage.getItem('date');
         const time = sessionStorage.getItem('time');
         const hiveIdString = sessionStorage.getItem('hiveId');
@@ -205,7 +208,7 @@ async function sendData(frames: Frame[], averages: Average[], inspeciton: Inspec
         sessionStorage.removeItem('frames');
         storeMessage("All data submitted to database", "main-message", "check_circle");
         setTimeout(() => {
-            window.location.href = "buzz-note-v3/";
+            navigateTo('/', { replace: true })
         }, 2000);
     } catch (error: any) {
         throw error;

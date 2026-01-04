@@ -1,11 +1,61 @@
 import { initializeApp } from "./main";
 import type { Box, Hive } from "./models";
+import { navigateTo } from "./modules/navigate";
 import { closeModal, createButton, createCheckbox, createInput, createListTable, createMessage, createRowForListTable, makeElement, openModal, storeMessage } from "./modules/utils";
 import { addBox, getBoxesForHiveID, getBoxForBoxId, updateBox } from "./services/boxService";
 import { getHiveForID, updateHive } from "./services/hiveService";
 
 const loading = document.getElementById("loading") as HTMLHtmlElement;
 const mainElement = document.querySelector('main') as HTMLElement;
+const backButton = document.getElementById("back-button") as HTMLElement;
+
+initializeApp("Loading").then(async () => {
+    try {
+        backButton.addEventListener('click', () => navigateTo('/hives/'));
+        const urlParams = new URLSearchParams(window.location.search);
+        const hiveId = urlParams.get('hiveId');
+        if (hiveId) {
+            const hiveData = await getHiveForID(parseInt(hiveId));
+            document.title = `Manage ${hiveData['hive_name']} - Buzznote`;
+            const pageHeader = makeElement("section", null, "button-group-row", null);
+            const pageHeading = makeElement("H2", 'page-heading', null, `${hiveData['hive_name']} (${hiveData['active'] ? 'Active' : 'Not Active'})`);
+            pageHeader.appendChild(pageHeading);
+            const editHiveButton = createButton("Edit Hive", "button", "edit-hive", "button orange", "edit");
+            if (hiveData['hive_id']) {
+                const hiveID = hiveData['hive_id'];
+                editHiveButton.addEventListener('click', () => openEditHiveModal(hiveID));
+            }
+            pageHeader.appendChild(editHiveButton);
+            mainElement.appendChild(pageHeader);
+            const boxesForHive = await getBoxesForHiveID(parseInt(hiveId), false);
+            if (boxesForHive.length > 0) {
+                const columnHeaders = ['box_name', 'num_frames', 'overwinter', 'active', 'box_type', 'edit'];
+                const boxesTable = createListTable(boxesForHive, columnHeaders, 'box_id');
+                boxesTable.setAttribute("id", "boxes-table");
+                const rows = boxesTable.querySelectorAll('tr');
+                rows.forEach(row => {
+                    row.addEventListener('click', async () => {
+                        await openModalForBox(parseInt(hiveId), parseInt(row.id));
+                    });
+                });
+                mainElement.appendChild(boxesTable);
+            } else {
+                const noBoxes = makeElement("h2", null, null, `No boxes for ${hiveData['hive_name']}`);
+                mainElement.appendChild(noBoxes);
+            }
+            const addBoxButton = createButton("Add Box", "button", "add-box", "button blue", "add");
+            addBoxButton.addEventListener('click', () => openModalForBox(parseInt(hiveId), null));
+            mainElement.appendChild(addBoxButton);
+        } else {
+            throw new Error("Hive data not loaded. Please return to the previous page and try again.");
+        }
+
+    } catch (error: any) {
+        createMessage(error, 'main-message', 'error');
+    }
+    loading.classList.add('hide');
+    mainElement.classList.remove('hide');
+});
 
 async function submitData(formData: FormData, hiveId: number, boxId: number | null) {
     try {
@@ -230,50 +280,3 @@ async function openEditHiveModal(hiveId :number) {
     });
     openModal(manageHiveBackdrop, manageHiveModal, 'box-name-input');
 }
-
-initializeApp("Loading").then(async () => {
-    try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const hiveId = urlParams.get('hiveId');
-        if (hiveId) {
-            const hiveData = await getHiveForID(parseInt(hiveId));
-            document.title = `Manage ${hiveData['hive_name']} - Buzznote`;
-            const pageHeader = makeElement("section", null, "button-group-row", null);
-            const pageHeading = makeElement("H2", 'page-heading', null, `${hiveData['hive_name']} (${hiveData['active'] ? 'Active' : 'Not Active'})`);
-            pageHeader.appendChild(pageHeading);
-            const editHiveButton = createButton("Edit Hive", "button", "edit-hive", "button orange", "edit");
-            if (hiveData['hive_id']) {
-                const hiveID = hiveData['hive_id'];
-                editHiveButton.addEventListener('click', () => openEditHiveModal(hiveID));
-            }
-            pageHeader.appendChild(editHiveButton);
-            mainElement.appendChild(pageHeader);
-            const boxesForHive = await getBoxesForHiveID(parseInt(hiveId), false);
-            if (boxesForHive.length > 0) {
-                const columnHeaders = ['box_name', 'num_frames', 'overwinter', 'active', 'box_type', 'edit'];
-                const boxesTable = createListTable(boxesForHive, columnHeaders, 'box_id');
-                boxesTable.setAttribute("id", "boxes-table");
-                const rows = boxesTable.querySelectorAll('tr');
-                rows.forEach(row => {
-                    row.addEventListener('click', async () => {
-                        await openModalForBox(parseInt(hiveId), parseInt(row.id));
-                    });
-                });
-                mainElement.appendChild(boxesTable);
-            } else {
-                const noBoxes = makeElement("h2", null, null, `No boxes for ${hiveData['hive_name']}`);
-                mainElement.appendChild(noBoxes);
-            }
-            const addBoxButton = createButton("Add Box", "button", "add-box", "button blue", "add");
-            addBoxButton.addEventListener('click', () => openModalForBox(parseInt(hiveId), null));
-            mainElement.appendChild(addBoxButton);
-        } else {
-            throw new Error("Hive data not loaded. Please return to the previous page and try again.");
-        }
-
-    } catch (error: any) {
-        createMessage(error, 'main-message', 'error');
-    }
-    loading.classList.add('hide');
-    mainElement.classList.remove('hide');
-});

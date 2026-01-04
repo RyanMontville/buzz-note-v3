@@ -7,6 +7,7 @@ import {
     createListTable,
     storeInspectionIds
 } from "./modules/utils";
+import { navigateTo } from "./modules/navigate";
 
 const mainElement = document.querySelector('main') as HTMLElement;
 const loading = document.getElementById('loading') as HTMLElement;
@@ -63,7 +64,7 @@ function displayInspections(year: string) {
         const inspectionsTable = createListTable(inspectionsToShow, columnHeaders, "inspection_id");
         inspectionsTable.classList.add('table-clickable');
         const rows = inspectionsTable.querySelectorAll('tr');
-        rows.forEach(row => row.addEventListener('click', () => window.location.href = `buzz-note-v3/past/inspectionDetail?sentFrom=past&year=${year}&inspectionId=${row.id}`));
+        rows.forEach(row => row.addEventListener('click', () => navigateTo('/past/inspectionDetail', { params: {sentFrom: "past", year: year, inspectionId: row.id} })));
         mainElement.appendChild(inspectionsTable);
     }
 }

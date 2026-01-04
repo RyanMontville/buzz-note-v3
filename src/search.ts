@@ -12,6 +12,7 @@ import {
     storeInspectionIds
  } from "./modules/utils";
  import { WeatherConditionsArray } from "./services/weatherService";
+import { navigateTo } from "./modules/navigate";
 
 const loading = document.getElementById("loading") as HTMLHtmlElement;
 const mainElement = document.querySelector('main') as HTMLElement;
@@ -98,7 +99,7 @@ async function displayInspectionsList(inspecitonsList: InspectionListItem[]) {
     inspectionsTable.classList.add('table-clickable');
     inspectionsTable.setAttribute('id', 'inspection-table');
     const rows = inspectionsTable.querySelectorAll('tr');
-    rows.forEach(row => row.addEventListener('click', () => window.location.href = `buzz-note-v3/past/inspectionDetail?sentFrom=search&&inspectionId=${row.id}`));
+    rows.forEach(row => row.addEventListener('click', () => navigateTo('/past/inspectionDetail', { params: {sentFrom: "search", inspectionId: row.id } })));
     loadingText.remove();
     mainElement.appendChild(inspectionsTable);
 }

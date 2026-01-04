@@ -1,4 +1,4 @@
-import { makeElement, createLink, createButton } from "./modules/utils";
+import { makeElement, createButton } from "./modules/utils";
 import { initializeApp } from "./main";
 import { navigateTo } from "./modules/navigate";
 
@@ -8,15 +8,17 @@ const loading = document.getElementById('loading');
 initializeApp("").then(async () => {
   const mainElement = document.createElement('main');
   const buttonGroup = makeElement('section', 'options', 'button-group-column', null);
-  const startNewInspection = createLink("Start New Inspection", "selectHive", false, 'large full button green', null)
+  const startNewInspection = createButton("Start New Inspection", "button", "new-inspection", "large full button green");
+  startNewInspection.addEventListener('click', () => navigateTo('/selectHive'));
   buttonGroup.appendChild(startNewInspection);
-  const manageHives = createLink("Manage Hives", 'hives', false, 'large full button purple', null);
+  const manageHives = createButton("Manage Hives", "button", "manage-hives", "large full button purple");
+  manageHives.addEventListener('click', () => navigateTo("/hives/"));
   buttonGroup.appendChild(manageHives);
-  // const viewPastInspections = createLink("View Past Inspections", "past/", false, 'large full button orange', null);
   const viewPastInspections = createButton("Past Inspections", "button", "past-inspections", "large full button orange");
-  viewPastInspections.addEventListener('click', () => navigateTo('/past/index.html'));
+  viewPastInspections.addEventListener('click', () => navigateTo('/past/'));
   buttonGroup.appendChild(viewPastInspections);
-  const search = createLink("Search", "search", false, "large full button blue", null);
+  const search = createButton("Search", "button", "search-button", "large full button blue");
+  search.addEventListener('click', () => navigateTo('/search'));
   buttonGroup.appendChild(search)
   mainElement.appendChild(buttonGroup);
   const oldMain = pageWrapper.querySelector('main') as HTMLElement;

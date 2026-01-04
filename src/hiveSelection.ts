@@ -9,26 +9,11 @@ import { getAllHives } from "./services/hiveService";
 import type { Hive } from "./models";
 import { initializeApp } from "./main";
 import { getCurrentWeather } from "./services/weatherService";
+import { navigateTo } from "./modules/navigate";
 
 const mainElement = document.querySelector('main') as HTMLElement;
 const pageWrapper = document.getElementById('page-wrapper') as HTMLElement;
 const loading = document.getElementById('loading') as HTMLElement;
-
-// export async function loadHiveSelection() {
-//     console.log("Loading hives");
-//     const hives: Hive[] = await getAllHives(true);
-//     const mainElement = document.createElement('main');
-//     const pageTile = makeElement("h2", null, null, "Select a hive");
-//     mainElement.appendChild(pageTile);
-//     const buttonGroup = hives.reduce((acc: HTMLElement, currentHive: Hive) => {
-//         const newButton = createButton(currentHive['hive_name'], 'button', currentHive['hive_id'].toString(), 'button white large full');
-//         acc.appendChild(newButton);
-//         return acc;
-//     }, document.createElement('section'))
-//     buttonGroup.setAttribute('class', "button-group-column");
-//     mainElement.appendChild(buttonGroup);
-//     return mainElement;
-// }
 
 initializeApp("Select Hive").then(async () => {
     try {
@@ -46,8 +31,8 @@ initializeApp("Select Hive").then(async () => {
                 sessionStorage.setItem('time', getStartTime());
                 const weather = await getCurrentWeather();
                 sessionStorage.setItem('weather', JSON.stringify(weather));
-                window.location.href = "buzz-note-v3/frames"
-            })
+                navigateTo('/frames');
+            });
             acc.appendChild(newButton);
             return acc;
         }, document.createElement('section'))

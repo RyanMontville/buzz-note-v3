@@ -1,5 +1,6 @@
 import { closeModal, createMessage } from "./modules/utils";
 import type { Message } from "./models";
+import { navigateTo } from "./modules/navigate";
 
 const headerTitle = document.getElementById('header-title') as HTMLElement;
 
@@ -23,7 +24,7 @@ export async function initializeApp(currentPage: string) {
     sessionStorage.removeItem("message");
   }
 
-  headerTitle.addEventListener('click', () => window.location.href = 'buzz-note-v3/');
+  headerTitle.addEventListener('click', () => navigateTo("/"));
 
   //event listener for the user to press escape to close any modal that is open
   document.addEventListener("keydown", (e) => {

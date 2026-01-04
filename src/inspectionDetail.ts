@@ -154,16 +154,16 @@ initializeApp("Loading").then(async () => {
 function setBackHref(sentFrom: string, year: string | null) {
     switch (sentFrom) {
         case "search":
-            backButton.addEventListener('click', () => navigateTo("/search.html"));
+            backButton.addEventListener('click', () => navigateTo("/search"));
             // backButton.setAttribute('href', "/search");
             break;
         default:
             if (year) {
                 // backButton.setAttribute('href', `/past/?year=${year}`);
-                backButton.addEventListener('click', () => navigateTo("/past/index.html", { params: {year: year.toString()}}));
+                backButton.addEventListener('click', () => navigateTo("/past/", { params: {year: year.toString()}}));
             } else {
                 // backButton.setAttribute('href', '/past/');
-                backButton.addEventListener('click', () => navigateTo("/past/index.html"));
+                backButton.addEventListener('click', () => navigateTo("/past/"));
             }
             break;
     }

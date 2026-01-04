@@ -7,6 +7,7 @@ import {
     createCheckboxRow,
     createMessage
 } from "./modules/utils";
+import { navigateTo } from "./modules/navigate";
 
 let boxes: Box[] | null = null;
 let boxGroups: BoxGroup[] = [];
@@ -305,6 +306,7 @@ function finishInspection() {
     });
     sessionStorage.setItem("frames", JSON.stringify(recordedFrames));
     sessionStorage.setItem("averages", JSON.stringify(averages));
+    navigateTo('/end')
     window.location.href = "buzz-note-v3/end";
 }
 
