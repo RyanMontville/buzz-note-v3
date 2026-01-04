@@ -1,0 +1,95 @@
+header {
+  display: grid;
+  grid-template-areas:
+    "back title"
+    "account account";
+  grid-template-columns: 50px auto;
+  align-items: center;
+  gap: 10px;
+}
+
+#back-button {
+  grid-area: back;
+  margin: 0 10px;
+}
+
+header h1 {
+  grid-area: title;
+  text-align: center;
+  margin: 0;
+}
+
+#account-container {
+  grid-area: account;
+  margin: 0 10px;
+  display: flex;
+  justify-content: center;
+}
+
+#page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#spacer {
+  display: block;
+  height: 100px;
+}
+
+#main-message {
+  grid-area: message-area;
+}
+
+main {
+  grid-area: main;
+}
+
+#inspection-header {
+  display: grid;
+  grid-template-areas:
+    "inspection-heading inspection-heading"
+    "previous-inspection next-inspection";
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  width: 100%;
+  gap: 5px;
+}
+
+#previous-button {
+  grid-area: previous-inspection;
+}
+
+#inspection-header h2 {
+  grid-area: inspection-heading;
+  text-align: center;
+  margin: 0;
+}
+
+#next-button {
+  grid-area: next-inspection;
+}
+
+/* Extra wide screens */
+@media (min-width: 1045px) {
+  #page-wrapper {
+    justify-items: center;
+  }
+}
+
+@media (min-width: 740px) {
+  header {
+    grid-template-areas: "back title account";
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto;
+  }
+
+  #account-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  #spacer {
+    height: 70px;
+  }
+}

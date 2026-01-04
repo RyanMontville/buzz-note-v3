@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f2a007">
+  <link href="../src/css/style.css" rel="stylesheet" />
+  <link href="../src/css/grid.css" rel="stylesheet" />
+  <link href="../src/css/tables.css" rel="stylesheet" />
+  <link href="../src/css/forms.css" rel="stylesheet" />
+  <title>buzznote</title>
+</head>
+
+<body>
+  <header>
+    <a href="/hives/" class="material-symbols-outlined" id="back-button">arrow_back</a>
+    <div id="title-container">
+      <h1><a href="/" id="header-title">BuzzNote</a></h1>
+    </div>
+    <section id="account-container">
+    </section>
+  </header>
+  <div id="page-wrapper">
+    <div id="spacer"></div>
+    <div id="loading">
+      <img src="../images/loading.gif" />
+    </div>
+    <section class="message-wrapper" id="main-message"></section>
+    <main class="hide"></main>
+  </div>
+  <div class="backdrop hide" id="manage-hive-backdrop">
+    <section class="message-wrapper" id="manage-hive-message"></section>
+    <form role="dialog" id="manage-box-modal" aria-modal="false" aria-labelledby="dialog-label" class="modal"></form>
+  </div>
+  <script type="module" src="../src/manageHive.ts"></script>
+</body>
+
+</html>

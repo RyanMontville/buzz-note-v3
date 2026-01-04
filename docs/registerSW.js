@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/buzz-note-v3/sw.js', { scope: '/buzz-note-v3/' })})}

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f2a007">
+  <link href="../src/css/style.css" rel="stylesheet" />
+  <link href="../src/css/grid.css" rel="stylesheet" />
+  <link href="../src/css/tables.css" rel="stylesheet" />
+  <title>buzznote</title>
+</head>
+
+<body>
+  <header>
+    <a href="/" class="material-symbols-outlined" id="back-button">arrow_back</a>
+    <h1><a href="/" id="header-title">BuzzNote</a></h1>
+    <section id="account-container">
+    </section>
+  </header>
+  <div id="page-wrapper">
+    <div id="spacer"></div>
+    <div id="loading">
+      <img src="../images/loading.gif" />
+    </div>
+    <section class="message-wrapper" id="main-message"></section>
+    <main class="hide"></main>
+  </div>
+  <script type="module" src="../src/past.ts"></script>
+</body>
+
+</html>
