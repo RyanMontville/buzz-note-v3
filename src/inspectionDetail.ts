@@ -35,7 +35,7 @@ initializeApp("Loading").then(async () => {
         if (idString) {
             const inspectionId = parseInt(idString);
             const inspeciton = await getInspectionForId(inspectionId);
-            document.title = `${formatDate(inspeciton['inspection_date'])} - Buzznote`;
+            document.title = `${formatDate(inspeciton['inspection_date'])} - BuzzNote`;
             //Create the inspectino header including previous and next buttons
             const inspecitonIdArrayString = sessionStorage.getItem("inspectionIds");
             const inspecitonHeader = makeElement("section", "inspection-header", null, null);

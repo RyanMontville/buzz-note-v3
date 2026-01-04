@@ -7,7 +7,7 @@ const headerTitle = document.getElementById('header-title') as HTMLElement;
 export async function initializeApp(currentPage: string) {
   if (currentPage !== "") {
     // Set the page title
-    document.title = `${currentPage} - Buzznote`;
+    document.title = `${currentPage} - BuzzNote`;
   }
   //Wait for the DOM to load
   await new Promise<void>(resolve => {
