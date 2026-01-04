@@ -4,6 +4,7 @@ Version 3.0 of Buzznote - A bee hive health tracker. A web app for Monte's Own t
 [View Live Demo](https://ryanmontville.com/buzz-note-v3/)
 ## New for version 3
 * The app now runs on vanilla TypeScript with Vite instead of Angular
+* The live app uses Firebase for user authentication. (The demo does not)
 * Viewing previous inspections now have buttons to view the next a previous inspections
 * When conducting an inspaection, the user can now go back and change a previous frame
 * When conducting an inspection, the app does not submit any data until the inspection is over
