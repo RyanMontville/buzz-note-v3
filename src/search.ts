@@ -98,7 +98,7 @@ async function displayInspectionsList(inspecitonsList: InspectionListItem[]) {
     inspectionsTable.classList.add('table-clickable');
     inspectionsTable.setAttribute('id', 'inspection-table');
     const rows = inspectionsTable.querySelectorAll('tr');
-    rows.forEach(row => row.addEventListener('click', () => window.location.href = `/past/inspectionDetail?sentFrom=search&&inspectionId=${row.id}`));
+    rows.forEach(row => row.addEventListener('click', () => window.location.href = `buzz-note-v3/past/inspectionDetail?sentFrom=search&&inspectionId=${row.id}`));
     loadingText.remove();
     mainElement.appendChild(inspectionsTable);
 }

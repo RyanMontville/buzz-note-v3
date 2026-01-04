@@ -23,7 +23,7 @@ export async function initializeApp(currentPage: string) {
     sessionStorage.removeItem("message");
   }
 
-  headerTitle.addEventListener('click', () => window.location.href = '/');
+  headerTitle.addEventListener('click', () => window.location.href = 'buzz-note-v3/');
 
   //event listener for the user to press escape to close any modal that is open
   document.addEventListener("keydown", (e) => {

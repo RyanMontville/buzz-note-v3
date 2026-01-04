@@ -205,7 +205,7 @@ async function sendData(frames: Frame[], averages: Average[], inspeciton: Inspec
         sessionStorage.removeItem('frames');
         storeMessage("All data submitted to database", "main-message", "check_circle");
         setTimeout(() => {
-            window.location.href = "/";
+            window.location.href = "buzz-note-v3/";
         }, 2000);
     } catch (error: any) {
         throw error;

@@ -305,6 +305,6 @@ function finishInspection() {
     });
     sessionStorage.setItem("frames", JSON.stringify(recordedFrames));
     sessionStorage.setItem("averages", JSON.stringify(averages));
-    window.location.href = "/end";
+    window.location.href = "buzz-note-v3/end";
 }
 

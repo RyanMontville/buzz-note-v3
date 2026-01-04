@@ -46,7 +46,7 @@ initializeApp("Select Hive").then(async () => {
                 sessionStorage.setItem('time', getStartTime());
                 const weather = await getCurrentWeather();
                 sessionStorage.setItem('weather', JSON.stringify(weather));
-                window.location.href = "/frames"
+                window.location.href = "buzz-note-v3/frames"
             })
             acc.appendChild(newButton);
             return acc;

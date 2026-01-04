@@ -33,7 +33,7 @@ async function addHive(formData: FormData) {
             const tbody = hivesTable.querySelector('tbody') as HTMLElement;
             tbody.appendChild(newHiveRow);
             createMessage(response['message'], "main-message", "check_circle");
-            newHiveRow.addEventListener('click', () => window.location.href = `/hives/manage?hiveId=${newHiveRow.id}`);
+            newHiveRow.addEventListener('click', () => window.location.href = `buzz-note-v3/hives/manage?hiveId=${newHiveRow.id}`);
         } else {
             window.location.reload();
         }
@@ -85,7 +85,7 @@ initializeApp("Manage Hives").then(async () => {
             const rows = hivesTable.querySelectorAll('tr');
             rows.forEach(row => {
                 row.addEventListener('click', () => {
-                    window.location.href = `/hives/manage?hiveId=${row.id}`;
+                    window.location.href = `buzz-note-v3/hives/manage?hiveId=${row.id}`;
                 });
             });
             mainElement.appendChild(hivesTable);

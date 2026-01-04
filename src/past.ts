@@ -63,7 +63,7 @@ function displayInspections(year: string) {
         const inspectionsTable = createListTable(inspectionsToShow, columnHeaders, "inspection_id");
         inspectionsTable.classList.add('table-clickable');
         const rows = inspectionsTable.querySelectorAll('tr');
-        rows.forEach(row => row.addEventListener('click', () => window.location.href = `/past/inspectionDetail?sentFrom=past&year=${year}&inspectionId=${row.id}`));
+        rows.forEach(row => row.addEventListener('click', () => window.location.href = `buzz-note-v3/past/inspectionDetail?sentFrom=past&year=${year}&inspectionId=${row.id}`));
         mainElement.appendChild(inspectionsTable);
     }
 }
