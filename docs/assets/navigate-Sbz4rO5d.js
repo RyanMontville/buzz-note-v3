@@ -1,0 +1,1 @@
+const t=(n,o={})=>{const{replace:r=!1,params:a}=o,e=new URL(n,window.location.origin);a&&Object.entries(a).forEach(([i,c])=>{e.searchParams.append(i,String(c))}),r?window.location.replace(e.href):window.location.href=e.href};export{t as n};

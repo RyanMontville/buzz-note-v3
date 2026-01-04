@@ -15,144 +15,11 @@ import { getInspectionForId, updateInspection } from "./services/inspectionServi
 import { Frame, Inspection } from "./models";
 import { getAverageForId } from "./services/averageService";
 import { getFramesForInspectionIDAndBoxName } from "./services/frameService";
+import { navigateTo } from "./modules/navigate";
 
 const mainElement = document.querySelector('main') as HTMLElement;
 const backButton = document.getElementById('back-button') as HTMLElement;
 const loading = document.getElementById('loading') as HTMLElement;
-
-function setBackHref(sentFrom: string, year: string | null) {
-    switch (sentFrom) {
-        case "search":
-            backButton.setAttribute('href', "/search");
-            break;
-        default:
-            if (year) {
-                backButton.setAttribute('href', `/past/?year=${year}`);
-            } else {
-                backButton.setAttribute('href', '/past/');
-            }
-            break;
-    }
-}
-
-async function submitData(formData: FormData, inspeciton: Inspection) {
-    try {
-        const updatedNotes = formData.get('textAreaInput');
-        if (updatedNotes === null || updatedNotes.toString().trim() === "") {
-            throw new Error("Please do not leave the notes empty");
-        }
-        const now = new Date();
-        const formatedDateTime = formatDateTime(now);
-        inspeciton['notes'] = updatedNotes.toString();
-        inspeciton['last_updated'] = formatedDateTime;
-        const response = await updateInspection(inspeciton);
-        displayNotes(response);
-        createMessage("Updated notes successfully.", "main-message", "check_circle");
-    } catch (error: any) {
-        createMessage(error, 'edit-message', 'error');
-    }
-    closeModal('notes-backdrop');
-}
-
-function displayNotes(inspeciton: Inspection) {
-    let inspecitonHasNotes: boolean = false;
-    const editNotesForm = document.getElementById('edit-notes-form');
-    if (editNotesForm) editNotesForm.remove();
-    const previousNotes = document.getElementById('notes-display');
-    if (previousNotes) previousNotes.remove();
-    const notesDiv = makeElement("div", 'notes-display', null, null);
-    if (!inspeciton['notes'] || inspeciton['notes'].toString().trim() === "") {
-        const notesHeading = makeElement("h2", null, null, "No Notes");
-        notesDiv.appendChild(notesHeading);
-    } else {
-        inspecitonHasNotes = true;
-        const notesHeading = makeElement("h2", null, null, "Notes");
-        notesDiv.appendChild(notesHeading);
-        const notesP = document.createElement('p');
-        notesP.innerHTML = inspeciton['notes'].replace(/\n/g, "<br/>");
-        notesDiv.appendChild(notesP);
-    }
-    if (inspeciton['last_updated']) {
-        const lastUpdatedP = document.createElement('p');
-        const updatedKey = makeElement('b', null, null, "Last Updated: ");
-        lastUpdatedP.appendChild(updatedKey);
-        const updatedValue = makeElement('span', null, null, formatDate(inspeciton['last_updated'].toString()));
-        lastUpdatedP.appendChild(updatedValue);
-        notesDiv.appendChild(lastUpdatedP);
-    }
-    if (inspecitonHasNotes) {
-        const editNotesButton = createButton("Edit Notes", 'button', 'edit-button', 'button white', "edit");
-        editNotesButton.addEventListener('click', () => displayEditNotesForm(inspeciton, inspecitonHasNotes));
-        notesDiv.appendChild(editNotesButton);
-    } else {
-        const addNotesButton = createButton("Add Notes", 'button', 'edit-button', 'button white', "add");
-        addNotesButton.addEventListener('click', () => displayEditNotesForm(inspeciton, inspecitonHasNotes));
-        notesDiv.appendChild(addNotesButton);
-    }
-    mainElement.appendChild(notesDiv);
-}
-
-function displayEditNotesForm(inspeciton: Inspection, inspecitonHasNotes: boolean) {
-    const notesBackdrop = document.getElementById('notes-backdrop') as HTMLElement;
-    const notesModal = document.getElementById('notes-modal') as HTMLFormElement;
-    notesModal.innerHTML = '';
-    let formHeading = makeElement("h2", null, null, null);
-    if (inspecitonHasNotes) {
-        formHeading.textContent = "Edit Notes:"
-    } else {
-        formHeading.textContent = "Add Notes:"
-    }
-    notesModal.appendChild(formHeading);
-    const textAreaInput: HTMLTextAreaElement = document.createElement('textarea');
-    textAreaInput.id = 'textAreaInput';
-    textAreaInput.name = 'textAreaInput';
-    textAreaInput.value = inspeciton['notes'];
-    notesModal.appendChild(textAreaInput);
-    const actionButtonRow = makeElement("section", null, "button-group-row", null);
-    const closeButton = createButton("Close", "button", "close-button", "button red");
-    closeButton.addEventListener('click', () => closeModal('notes-backdrop'));
-    actionButtonRow.appendChild(closeButton);
-    const submitButton = createButton("Submit", "submit", "submit-button", "button green");
-    actionButtonRow.appendChild(submitButton);
-    notesModal.appendChild(actionButtonRow);
-    notesModal.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData: FormData = new FormData(notesModal);
-        await submitData(formData, inspeciton);
-    });
-    openModal(notesBackdrop, notesModal, "textAreaInput");
-}
-
-function getVisualClassesForFrameType(frame: Frame): string {
-    if (frame.brood) {
-        return "brood";
-    } else if (frame.honey || frame.nectar) {
-        return "honey";
-    } else if (frame.drawn_comb) {
-        return "draw-comb";
-    } else {
-        return "none";
-    }
-}
-
-function makeLegendKey(frameType: string) {
-    const newKeyDiv = makeElement("label", null, null, null);
-    const keyDot = makeElement("span", null, frameType, null);
-    newKeyDiv.appendChild(keyDot);
-    const keyText = makeElement("p", null, null, frameType);
-    newKeyDiv.appendChild(keyText);
-    return newKeyDiv;
-}
-
-function makeLinkHref(id: number, sentFrom: string | null, year: string | null) {
-    if (sentFrom && year) {
-        return `inspectionDetail?sentFrom=${sentFrom}&year=${year}&inspectionId=${id}`;
-    } else if (sentFrom) {
-        return `inspectionDetail?sentFrom=${sentFrom}&inspectionId=${id}`;
-    }
-    return `inspectionDetail?inspectionId=${id}`;
-
-}
 
 initializeApp("Loading").then(async () => {
     try {
@@ -282,4 +149,141 @@ initializeApp("Loading").then(async () => {
         loading.classList.add('hide');
     }
 
-})
+});
+
+function setBackHref(sentFrom: string, year: string | null) {
+    switch (sentFrom) {
+        case "search":
+            backButton.addEventListener('click', () => navigateTo("/search.html"));
+            // backButton.setAttribute('href', "/search");
+            break;
+        default:
+            if (year) {
+                // backButton.setAttribute('href', `/past/?year=${year}`);
+                backButton.addEventListener('click', () => navigateTo("/past/index.html", { params: {year: year.toString()}}));
+            } else {
+                // backButton.setAttribute('href', '/past/');
+                backButton.addEventListener('click', () => navigateTo("/past/index.html"));
+            }
+            break;
+    }
+}
+
+async function submitData(formData: FormData, inspeciton: Inspection) {
+    try {
+        const updatedNotes = formData.get('textAreaInput');
+        if (updatedNotes === null || updatedNotes.toString().trim() === "") {
+            throw new Error("Please do not leave the notes empty");
+        }
+        const now = new Date();
+        const formatedDateTime = formatDateTime(now);
+        inspeciton['notes'] = updatedNotes.toString();
+        inspeciton['last_updated'] = formatedDateTime;
+        const response = await updateInspection(inspeciton);
+        displayNotes(response);
+        createMessage("Updated notes successfully.", "main-message", "check_circle");
+    } catch (error: any) {
+        createMessage(error, 'edit-message', 'error');
+    }
+    closeModal('notes-backdrop');
+}
+
+function displayNotes(inspeciton: Inspection) {
+    let inspecitonHasNotes: boolean = false;
+    const editNotesForm = document.getElementById('edit-notes-form');
+    if (editNotesForm) editNotesForm.remove();
+    const previousNotes = document.getElementById('notes-display');
+    if (previousNotes) previousNotes.remove();
+    const notesDiv = makeElement("div", 'notes-display', null, null);
+    if (!inspeciton['notes'] || inspeciton['notes'].toString().trim() === "") {
+        const notesHeading = makeElement("h2", null, null, "No Notes");
+        notesDiv.appendChild(notesHeading);
+    } else {
+        inspecitonHasNotes = true;
+        const notesHeading = makeElement("h2", null, null, "Notes");
+        notesDiv.appendChild(notesHeading);
+        const notesP = document.createElement('p');
+        notesP.innerHTML = inspeciton['notes'].replace(/\n/g, "<br/>");
+        notesDiv.appendChild(notesP);
+    }
+    if (inspeciton['last_updated']) {
+        const lastUpdatedP = document.createElement('p');
+        const updatedKey = makeElement('b', null, null, "Last Updated: ");
+        lastUpdatedP.appendChild(updatedKey);
+        const updatedValue = makeElement('span', null, null, formatDate(inspeciton['last_updated'].toString()));
+        lastUpdatedP.appendChild(updatedValue);
+        notesDiv.appendChild(lastUpdatedP);
+    }
+    if (inspecitonHasNotes) {
+        const editNotesButton = createButton("Edit Notes", 'button', 'edit-button', 'button white', "edit");
+        editNotesButton.addEventListener('click', () => displayEditNotesForm(inspeciton, inspecitonHasNotes));
+        notesDiv.appendChild(editNotesButton);
+    } else {
+        const addNotesButton = createButton("Add Notes", 'button', 'edit-button', 'button white', "add");
+        addNotesButton.addEventListener('click', () => displayEditNotesForm(inspeciton, inspecitonHasNotes));
+        notesDiv.appendChild(addNotesButton);
+    }
+    mainElement.appendChild(notesDiv);
+}
+
+function displayEditNotesForm(inspeciton: Inspection, inspecitonHasNotes: boolean) {
+    const notesBackdrop = document.getElementById('notes-backdrop') as HTMLElement;
+    const notesModal = document.getElementById('notes-modal') as HTMLFormElement;
+    notesModal.innerHTML = '';
+    let formHeading = makeElement("h2", null, null, null);
+    if (inspecitonHasNotes) {
+        formHeading.textContent = "Edit Notes:"
+    } else {
+        formHeading.textContent = "Add Notes:"
+    }
+    notesModal.appendChild(formHeading);
+    const textAreaInput: HTMLTextAreaElement = document.createElement('textarea');
+    textAreaInput.id = 'textAreaInput';
+    textAreaInput.name = 'textAreaInput';
+    textAreaInput.value = inspeciton['notes'];
+    notesModal.appendChild(textAreaInput);
+    const actionButtonRow = makeElement("section", null, "button-group-row", null);
+    const closeButton = createButton("Close", "button", "close-button", "button red");
+    closeButton.addEventListener('click', () => closeModal('notes-backdrop'));
+    actionButtonRow.appendChild(closeButton);
+    const submitButton = createButton("Submit", "submit", "submit-button", "button green");
+    actionButtonRow.appendChild(submitButton);
+    notesModal.appendChild(actionButtonRow);
+    notesModal.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData: FormData = new FormData(notesModal);
+        await submitData(formData, inspeciton);
+    });
+    openModal(notesBackdrop, notesModal, "textAreaInput");
+}
+
+function getVisualClassesForFrameType(frame: Frame): string {
+    if (frame.brood) {
+        return "brood";
+    } else if (frame.honey || frame.nectar) {
+        return "honey";
+    } else if (frame.drawn_comb) {
+        return "draw-comb";
+    } else {
+        return "none";
+    }
+}
+
+function makeLegendKey(frameType: string) {
+    const newKeyDiv = makeElement("label", null, null, null);
+    const keyDot = makeElement("span", null, frameType, null);
+    newKeyDiv.appendChild(keyDot);
+    const keyText = makeElement("p", null, null, frameType);
+    newKeyDiv.appendChild(keyText);
+    return newKeyDiv;
+}
+
+function makeLinkHref(id: number, sentFrom: string | null, year: string | null) {
+    if (sentFrom && year) {
+        return `inspectionDetail?sentFrom=${sentFrom}&year=${year}&inspectionId=${id}`;
+    } else if (sentFrom) {
+        return `inspectionDetail?sentFrom=${sentFrom}&inspectionId=${id}`;
+    }
+    return `inspectionDetail?inspectionId=${id}`;
+
+}

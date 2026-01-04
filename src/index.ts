@@ -1,5 +1,6 @@
-import { makeElement, createLink } from "./modules/utils";
+import { makeElement, createLink, createButton } from "./modules/utils";
 import { initializeApp } from "./main";
+import { navigateTo } from "./modules/navigate";
 
 const pageWrapper = document.getElementById('page-wrapper') as HTMLElement;
 const loading = document.getElementById('loading');
@@ -11,7 +12,9 @@ initializeApp("").then(async () => {
   buttonGroup.appendChild(startNewInspection);
   const manageHives = createLink("Manage Hives", 'hives', false, 'large full button purple', null);
   buttonGroup.appendChild(manageHives);
-  const viewPastInspections = createLink("View Past Inspections", "past/", false, 'large full button orange', null)
+  // const viewPastInspections = createLink("View Past Inspections", "past/", false, 'large full button orange', null);
+  const viewPastInspections = createButton("Past Inspections", "button", "past-inspections", "large full button orange");
+  viewPastInspections.addEventListener('click', () => navigateTo('/past/index.html'));
   buttonGroup.appendChild(viewPastInspections);
   const search = createLink("Search", "search", false, "large full button blue", null);
   buttonGroup.appendChild(search)
