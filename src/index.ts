@@ -9,7 +9,7 @@ initializeApp("").then(async () => {
   const buttonGroup = makeElement('section', 'options', 'button-group-column', null);
   const startNewInspection = createLink("Start New Inspection", "selectHive", false, 'large full button green', null)
   buttonGroup.appendChild(startNewInspection);
-  const manageHives = createLink("Manage Hives", 'hives/', false, 'large full button purple', null);
+  const manageHives = createLink("Manage Hives", 'hives', false, 'large full button purple', null);
   buttonGroup.appendChild(manageHives);
   const viewPastInspections = createLink("View Past Inspections", "past/", false, 'large full button orange', null)
   buttonGroup.appendChild(viewPastInspections);
