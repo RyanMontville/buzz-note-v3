@@ -1,0 +1,1 @@
+const l=(n,o={})=>{const{replace:r=!1,params:a}=o,t=`/buzz-note-v3/${n}`.replace(/\/+/g,"/"),e=new URL(t,window.location.origin);a&&Object.entries(a).forEach(([c,s])=>{e.searchParams.append(c,String(s))}),r?window.location.replace(e.href):window.location.href=e.href};export{l as n};

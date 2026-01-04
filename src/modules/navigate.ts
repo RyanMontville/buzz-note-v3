@@ -17,18 +17,17 @@ interface NavOptions {
 
 export const navigateTo = (path: AppPath, options: NavOptions = {}): void => {
   const { replace = false, params } = options;
+  const baseUrl = import.meta.env.BASE_URL;
   
-  // 1. Construct the URL
-  const url = new URL(path, window.location.origin);
+  const fullPath = `${baseUrl}${path}`.replace(/\/+/g, '/');
+  const url = new URL(fullPath, window.location.origin);
 
-  // 2. Append Search Params (if any)
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
       url.searchParams.append(key, String(value));
     });
   }
 
-  // 3. Navigate
   if (replace) {
     window.location.replace(url.href);
   } else {
