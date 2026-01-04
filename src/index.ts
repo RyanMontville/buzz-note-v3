@@ -7,13 +7,13 @@ const loading = document.getElementById('loading');
 initializeApp("").then(async () => {
   const mainElement = document.createElement('main');
   const buttonGroup = makeElement('section', 'options', 'button-group-column', null);
-  const startNewInspection = createLink("Start New Inspection", "buzz-note-v3/selectHive", false, 'large full button green', null)
+  const startNewInspection = createLink("Start New Inspection", "selectHive", false, 'large full button green', null)
   buttonGroup.appendChild(startNewInspection);
-  const manageHives = createLink("Manage Hives", 'buzz-note-v3/hives/', false, 'large full button purple', null);
+  const manageHives = createLink("Manage Hives", 'hives/', false, 'large full button purple', null);
   buttonGroup.appendChild(manageHives);
-  const viewPastInspections = createLink("View Past Inspections", "buzz-note-v3/past/", false, 'large full button orange', null)
+  const viewPastInspections = createLink("View Past Inspections", "past/", false, 'large full button orange', null)
   buttonGroup.appendChild(viewPastInspections);
-  const search = createLink("Search", "buzz-note-v3/search", false, "large full button blue", null);
+  const search = createLink("Search", "search", false, "large full button blue", null);
   buttonGroup.appendChild(search)
   mainElement.appendChild(buttonGroup);
   const oldMain = pageWrapper.querySelector('main') as HTMLElement;
