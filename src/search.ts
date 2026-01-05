@@ -16,8 +16,10 @@ import { navigateTo } from "./modules/navigate";
 
 const loading = document.getElementById("loading") as HTMLHtmlElement;
 const mainElement = document.querySelector('main') as HTMLElement;
+const backButton = document.getElementById('back-button') as HTMLElement;
 
 initializeApp("Search").then(() => {
+    backButton.addEventListener('click', () => navigateTo('/'));
     const ChooseHeading = makeElement("h2", null, null, "Choose a search option");
     mainElement.appendChild(ChooseHeading);
     //Search options

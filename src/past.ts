@@ -11,8 +11,30 @@ import { navigateTo } from "./modules/navigate";
 
 const mainElement = document.querySelector('main') as HTMLElement;
 const loading = document.getElementById('loading') as HTMLElement;
+const backButton = document.getElementById("back-button") as HTMLElement;
 let inspections: InspectionListItem[] | null = null;
 let yearsList: string[] = [];
+
+initializeApp("Past Inspections").then(async () => {
+    try {
+        backButton.addEventListener('click', () => navigateTo('/'));
+        const urlParams = new URLSearchParams(window.location.search);
+        const year = urlParams.get('year');
+        inspections = await getListOfInspections();
+        if (inspections) storeInspectionIds(inspections);
+        getYears();
+        if (year) {
+            displayInspections(year);
+        } else {
+            displayInspections(yearsList[yearsList.length - 1]);
+        }
+        loading.classList.add('hide');
+    } catch (error: any) {
+        loading.classList.add('hide');
+        createMessage(error, 'main-message', 'error');
+    }
+    mainElement.classList.remove('hide');
+});
 
 function getYear(date: string): string {
     return date.split("-")[0];
@@ -68,23 +90,3 @@ function displayInspections(year: string) {
         mainElement.appendChild(inspectionsTable);
     }
 }
-
-initializeApp("Past Inspections").then(async () => {
-    try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const year = urlParams.get('year');
-        inspections = await getListOfInspections();
-        if (inspections) storeInspectionIds(inspections);
-        getYears();
-        if (year) {
-            displayInspections(year);
-        } else {
-            displayInspections(yearsList[yearsList.length - 1]);
-        }
-        loading.classList.add('hide');
-    } catch (error: any) {
-        loading.classList.add('hide');
-        createMessage(error, 'main-message', 'error');
-    }
-    mainElement.classList.remove('hide');
-});

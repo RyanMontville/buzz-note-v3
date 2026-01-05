@@ -14,9 +14,11 @@ import { navigateTo } from "./modules/navigate";
 const mainElement = document.querySelector('main') as HTMLElement;
 const pageWrapper = document.getElementById('page-wrapper') as HTMLElement;
 const loading = document.getElementById('loading') as HTMLElement;
+const backButton = document.getElementById("back-button") as HTMLElement;
 
 initializeApp("Select Hive").then(async () => {
     try {
+        backButton.addEventListener('click', () => navigateTo('/'));
         const hives: Hive[] = await getAllHives(true);
         console.log(hives)
         const mainElement = document.createElement('main');

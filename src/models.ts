@@ -149,10 +149,6 @@ export class Hive {
         this.num_boxes = num_boxes;
         this.active = active ? 1 : 0;
     }
-
-    // get isActive(): boolean {
-    //     return this.active === 1 ? true : false;
-    // }
 }
 
 export class Box {
