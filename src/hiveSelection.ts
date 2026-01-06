@@ -8,7 +8,7 @@ import {
 import { getAllHives } from "./services/hiveService";
 import type { Hive } from "./models";
 import { initializeApp } from "./main";
-import { getCurrentWeather } from "./services/weatherService";
+import { getLocalWeather } from "./services/weatherService";
 import { navigateTo } from "./modules/navigate";
 
 const mainElement = document.querySelector('main') as HTMLElement;
@@ -31,7 +31,7 @@ initializeApp("Select Hive").then(async () => {
                 sessionStorage.setItem('hiveName', currentHive['hive_name']);
                 sessionStorage.setItem('date', getFormattedDate());
                 sessionStorage.setItem('time', getStartTime());
-                const weather = await getCurrentWeather();
+                const weather = await getLocalWeather();
                 sessionStorage.setItem('weather', JSON.stringify(weather));
                 navigateTo('/frames');
             });

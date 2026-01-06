@@ -96,7 +96,7 @@ async function displayInspectionsList(inspecitonsList: InspectionListItem[]) {
     clearMessages();
     const loadingText = makeElement("h3", "loading-text", null, "Loading inspections...");
     mainElement.appendChild(loadingText);
-    const columnHeaders: string[] = ['hive_name', 'inspection_date', 'start_time', 'num_boxes', 'total_frames', 'has_notes'];
+    const columnHeaders: string[] = ['hive_name', 'inspection_date', 'start_time', 'num_boxes', 'total_frames'];
     const inspectionsTable = createListTable(inspecitonsList, columnHeaders, "inspection_id");
     inspectionsTable.classList.add('table-clickable');
     inspectionsTable.setAttribute('id', 'inspection-table');

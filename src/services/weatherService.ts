@@ -1,5 +1,6 @@
-import { TempAndCondition } from "../models";
-import { loadData } from "../modules/utils";
+import { TempAndCondition, type UserLocation } from "../models";
+import { getFormattedDate, getStartTime, loadData, storeMessage } from "../modules/utils";
+import { db } from './db';
 
 interface WeatherData {
     latitude: number;
@@ -80,3 +81,60 @@ export const WeatherConditionsArray: string[] = [
   "Thunderstorm",
   "Unknown"
 ];
+
+const getCoordinates = (): Promise<GeolocationCoordinates> => {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error("Geolocation is not supported by your browser."));
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => resolve(position.coords),
+      (error) => reject(error)
+    );
+  });
+};
+
+export async function setCurrentLocation() {
+  const coords = await getCoordinates();
+  try {
+     await db.locations.add({
+      id: 1,
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+      accuracy: coords.accuracy,
+      timestamp: getFormattedDate() + " " + getStartTime()
+    });
+    storeMessage("Location updated successfully", "main-message", "check_circle")
+
+  } catch (error: any) {
+    console.error('Failed to save location to IndexedDB:', error);
+  }
+}
+
+export async function getUserLocationFromDB() {
+  return await db.locations.get(1);
+}
+
+export async function getLocalWeather() {
+  try {
+    // 1. Get user location
+    const usersLocation: UserLocation | undefined = await db.locations.get(1);
+    let url: string = "";
+    if (usersLocation) {
+          url = `${apiUrl}?latitude=${usersLocation['latitude']}&longitude=${usersLocation['longitude']}&current_weather=true&temperature_unit=${temperatureUnit}&timezone=auto`;
+    } else {
+      url = `${apiUrl}?latitude=${latitude}&longitude=${longitude}&current_weather=true&temperature_unit=${temperatureUnit}&timezone=auto`;
+    }
+    // 3. Fetch data
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Weather data fetch failed");
+
+    const data: WeatherData = await response.json();
+
+    // 4. Use the data
+    return new TempAndCondition(data['current_weather']['temperature'], parseWeatherCode(data['current_weather']['weathercode']));
+    
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}

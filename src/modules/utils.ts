@@ -1,4 +1,5 @@
 import { Average, AverageDetail, Box, Frame, FramePair, Hive, Inspection, InspectionListItem, Message } from "../models";
+import { db } from '../services/db';
 
 export function createButton(
   buttonText: string,
@@ -217,20 +218,14 @@ export function createRowForListTable(item: TableItem, columnHeaders: string[], 
     const itemValue = (item as any)[key];
     let valueString: string = "";
     if (key === 'active') {
-      valueString = itemValue === true ? 'Active' : 'Not Active';
+      valueString = itemValue === 1 ? 'Active' : 'Not Active';
     } else if (key === 'overwinter') {
-      valueString = itemValue === true ? 'Overwintered' : 'Not Overwintered';
+      valueString = itemValue === 1 ? 'Overwintered' : 'Not Overwintered';
     } else if (key === "edit") {
       const editButton = createButton("", "button", itemId, "", "edit");
       newCell.appendChild(editButton);
     } else if (key === "inspection_date") {
       valueString = formatDate(itemValue);
-    } else if (key === "has_notes") {
-      if (itemValue === 1) {
-        valueString = "check"
-        newCell.classList.add('material-symbols-outlined')
-        newCell.style.width = "100%";
-      }
     } else {
       valueString = itemValue?.toString() || ""
     }
@@ -370,12 +365,6 @@ export function createRadioGroup(heading: string, options: string[], buttonColor
 
 }
 
-// const readableKey = currentColumnHeader.split('_')
-//         .map(word => {
-//           if (word.length === 0) return '';
-//           return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-//         })
-
 export function storeInspectionIds(inspectionList: InspectionListItem[]) {
   const inspectionIds: number[] = inspectionList.reduce((acc: number[], currentInspection: InspectionListItem) => {
     acc.push(currentInspection['inspection_id']);
@@ -455,4 +444,17 @@ export function trapFocus(modal: HTMLElement, backdrop: HTMLElement) {
       }
     }
   });
+}
+
+export async function deleteEntireDatabase() {
+  try {
+    await db.delete();
+    storeMessage("Database reset successful", "main-message", "delete");
+    window.location.reload()
+    console.log("Database deleted successfully.");
+    // Note: You will need to refresh or re-instantiate your DB class 
+    // to use it again after this.
+  } catch (error) {
+    console.error("Could not delete database:", error);
+  }
 }

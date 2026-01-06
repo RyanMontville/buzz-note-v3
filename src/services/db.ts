@@ -4,7 +4,8 @@ import {
     Inspection, 
     Average, 
     Hive, 
-    Box } from '../models';
+    Box, 
+    type UserLocation} from '../models';
 
 
 export class DemoDatabase extends Dexie {
@@ -13,6 +14,7 @@ export class DemoDatabase extends Dexie {
   boxes!: Table<Box>;
   averages!: Table<Average>;
   frames!: Table<Frame>;
+  locations!: Table<UserLocation>;
 
   constructor() {
     super('BuzzNote');
@@ -22,6 +24,7 @@ export class DemoDatabase extends Dexie {
       boxes: '++box_id, hive_id, active',
       averages: '++average_id, inspection_id',
       frames: '++frame_id, inspection_id, box_id', 
+      locations: '++id, timestamp'
     });
     this.hives.mapToClass(Hive);
     this.inspections.mapToClass(Inspection);

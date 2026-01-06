@@ -298,3 +298,11 @@ export interface BoxGroup {
     frames: FrameFormGroup[];
     recorded: boolean;
 }
+
+export interface UserLocation {
+    id: number;
+    latitude: number;
+    longitude: number;
+    timestamp: string;
+    accuracy: number;
+}
