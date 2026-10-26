@@ -10,7 +10,7 @@
 
 Version 3.0 of Buzznote - A bee hive health tracker. A web app for Monte's Own that can be used to track the health of bee hives. The app allows the user to quickly and easily record the data using their phone when the go to inspect the bee hives. The purpose of recording the inspections is to try to find patterns and possibly use the data from last year to predict what will happen this year. 
 
-[View Live Demo](https://ryanmontville.com/buzz-note-v3/)
+[View Live Demo](https://ryanmontville.comgithub.io/buzz-note-v3/)
 ## New for version 3
 * The app now runs on vanilla TypeScript with Vite instead of Angular
 * The live app uses Firebase for user authentication. (The demo does not)

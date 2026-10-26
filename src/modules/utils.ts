@@ -452,8 +452,6 @@ export async function deleteEntireDatabase() {
     storeMessage("Database reset successful", "main-message", "delete");
     window.location.reload()
     console.log("Database deleted successfully.");
-    // Note: You will need to refresh or re-instantiate your DB class 
-    // to use it again after this.
   } catch (error) {
     console.error("Could not delete database:", error);
   }
